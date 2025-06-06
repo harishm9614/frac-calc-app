@@ -20,7 +20,9 @@ def extract_text_pdf(file):
     text = ""
     pdf_reader = PyPDF2.PdfReader(file)
     for page in pdf_reader.pages:
-        text += page.extract_text() + "\n"
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text + "\n"
     return text
 
 def extract_text_word(file):
@@ -28,20 +30,8 @@ def extract_text_word(file):
     return text
 
 def extract_text_excel(file):
-    df = pd.read_excel(file, sheet_name=None)
+    df_dict = pd.read_excel(file, sheet_name=None)
     all_text = ""
-    for sheet, data in df.items():
+    for sheet, data in df_dict.items():
         all_text += f"Sheet: {sheet}\n"
-        all_text += data.astype(str).apply(lambda x: ' '.join(x), axis=1).str.cat(sep='\n')
-        all_text += "\n\n"
-    return all_text
-
-text = ""
-if uploaded_file is not None:
-    file_type = uploaded_file.type
-    st.write(f"Uploaded file type: {file_type}")
-
-    if file_type == "application/pdf":
-        text = extract_text_pdf(uploaded_file)
-    elif file_type in ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"]:
-        text = extract_text_word(uploaded_fi_
+        all_text += data.astype(str).apply(lambda x: ' '.join(x), axis=1).st_
